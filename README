@@ -1,8 +1,11 @@
                                      scmake
 
+                                  EXPERIMENTAL
+
 A simple build tool for C and other sorts of projects. Designed for POSIX
 systems. It helps you write simple configure scripts and runs your Makefiles
-through the C preprocessor.
+through the C preprocessor. Check out the examples directory to get an idea of
+how it works.
 
 DEPENDENCIES
 
@@ -19,6 +22,6 @@ $ make
 
 Use ../configure --help to learn about available options.
 
-USAGE
+MANUAL
 
-See the "examples" directory, or scmake(7).
+scmake(7), scmake(5)
