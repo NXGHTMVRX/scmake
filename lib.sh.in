@@ -71,8 +71,6 @@ setdefaults() {
     setstr ldflags __LDFLAGS__
 }
 
-dependencies=""
-
 dependency() {
     dep=$1
     shift
