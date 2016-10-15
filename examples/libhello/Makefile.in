@@ -1,0 +1,60 @@
+include config.mk
+
+SRC:=$(BASE)/src
+
+OBJECTS:=\
+	hello.o \
+	world.o
+
+INCLUDES=\
+	$(BASE)/include/hello.h \
+	$(BASE)/include/world.h
+
+%.o: $(SRC)/%.c $(INCLUDES)
+	$(CC) -c -o $@ -fPIC -I$(SRC) -I$(BASE)/include $(CFLAGS) $<
+
+hello.so: $(OBJECTS)
+	$(LD) -shared -o $@ $^ -lc $(LDFLAGS)
+
+hello.a: $(OBJECTS)
+	$(AR) cr $@ $^
+
+hello_test: $(BASE)/test/main.c hello.a
+	$(CC) -g -o $@ \
+		$(BASE)/test/main.c -I$(BASE)/include \
+		-L. -l:hello.a $(CFLAGS)
+
+all: __ALL__
+
+install: __INSTALL__ install_headers
+
+all_static: hello.a
+
+all_shared: hello.so
+
+check: hello_test
+	./hello_test
+
+install_static:
+	install -Dm644 hello.a $(DESTDIR)/lib/hello.a
+
+install_shared:
+	install -Dm755 hello.so $(DESTDIR)/lib/hello.so
+
+install_headers:
+	install -Dm644 $(BASE)/include/hello.h $(DESTDIR)/include/hello.h
+
+uninstall:
+	rm -f $(DESTDIR)/include/hello.h
+	rm -f $(DESTDIR)/lib/hello.so
+	rm -f $(DESTDIR)/lib/hello.a
+
+clean:
+	find . -name "*.o" -delete
+	find . -name "*.so" -delete
+	find . -name "*.a" -delete
+	rm -f hello_test
+
+.PHONY: all_static all_shared all \
+	install install_static install_shared install_headers \
+	uninstall clean distclean check

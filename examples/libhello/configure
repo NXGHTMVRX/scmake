@@ -1,0 +1,53 @@
+#!/usr/bin/env sh
+. ${SCMAKE:-/usr/lib/scmake}/lib.sh
+
+static=yes
+shared=yes
+
+show_help() {
+    cat <<EOF
+USAGE
+    $ $0 [options...]
+    $ make
+    # sudo make install
+
+OPTIONS
+    Defaults shown.
+
+    --prefix=$prefix
+        Sets the installation prefix.
+    --static=$static
+        Enables or disables building and installing the static libraries.
+    --shared=$shared
+        Enables or disables building and installing the shared libraries.
+EOF
+}
+
+while [ $# -gt 0 ]
+do
+    key=$(parsearg -k "$1")
+    val=$(parsearg -v "$1")
+    case "$key" in
+        --help) show_help; exit 0 ;;
+        --prefix) prefix="$val" ;;
+        --static) static="$val" ;;
+        --shared) shared="$val" ;;
+        *) error_opt "$1" ;;
+    esac
+    shift
+done
+
+setdefaults
+setbool static
+setbool shared
+
+[ $static ] && add all all_static
+[ $static ] && add install all_static
+
+[ $shared ] && add all all_shared
+[ $shared ] && add install all_shared
+
+setstr all __ALL__
+setstr install __INSTALL__
+
+gen "$all" "$install"
