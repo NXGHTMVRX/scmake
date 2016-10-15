@@ -6,7 +6,10 @@ lib.sh: $(BASE)/lib.sh.in
 		-D_PREFIX_=__PREFIX__ \
 		"$(BASE)/lib.sh.in" -o lib.sh
 
-all: lib.sh
+config.mk.in: $(BASE)/config.mk.in
+	cp $< $@
+
+all: lib.sh config.mk.in
 
 clean:
 	rm -f lib.sh

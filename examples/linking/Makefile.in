@@ -1,0 +1,18 @@
+include config.mk
+
+linking: $(BASE)/main.c
+	$(CC) -o $@ $(CFLAGS) $(LDFLAGS) $<
+
+all: linking
+
+install: linking
+	install -Dm644 linking $(DESTDIR)/bin/linking
+
+uninstall:
+	rm -f $(DESTDIR)/bin/linking
+
+clean:
+	find . -name "*.o" -delete
+	rm -f linking
+
+.PHONY: all install uninstall clean distclean

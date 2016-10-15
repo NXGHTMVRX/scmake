@@ -4,8 +4,8 @@ base=$(dirname "$(readlink -f "$0")")
 SCMAKE=${SCMAKE:-_PREFIX_/lib/scmake}
 
 prefix=${prefix:-_DEFAULT_PREFIX_}
-cflags="-D__CFLAGS__=$CFLAGS"
-ldflags="-D__LDFLAGS__=$LDFLAGS"
+cflags="$CFLAGS"
+ldflags="$LDFLAGS"
 [ -z "$CC" ] && CC=$(which cc)
 [ -z "$CPP" ] && CPP=$(which cpp)
 [ -z "$CXX" ] && CXX=$(which c++)
@@ -67,6 +67,23 @@ setbool() {
 
 setdefaults() {
     setstr prefix __PREFIX__
+    setstr cflags __CFLAGS__
+    setstr ldflags __LDFLAGS__
+}
+
+dependencies=""
+
+dependency() {
+    dep=$1
+    shift
+    pkg-config $dep || {
+        echo "Missing dependency $dep"
+        exit 1
+    }
+    _cflags=$(pkg-config --cflags $dep $*)
+    _ldflags=$(pkg-config --libs $dep $*)
+    add cflags "$_cflags"
+    add ldflags "$_ldflags"
 }
 
 gen() {

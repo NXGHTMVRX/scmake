@@ -7,6 +7,11 @@ systems. It helps you write simple configure scripts and runs your Makefiles
 through the C preprocessor. Check out the examples directory to get an idea of
 how it works.
 
+TODO
+
+- man pages
+- Dunno? Try it and tell me where it can be improved.
+
 DEPENDENCIES
 
 - sh
