@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+. ${SCMAKE:-/usr/lib/scmake}/lib.sh
+
+while [ $# -gt 0 ]
+do
+    key=$(parsearg -k "$1")
+    val=$(parsearg -v "$1")
+    case "$key" in
+        --help) showhelp; exit 0 ;;
+        --prefix) prefix="$val" ;;
+        *) opterror "$1" ;;
+    esac
+    shift
+done
+
+setdefaults
+gen

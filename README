@@ -1,0 +1,24 @@
+                                     scmake
+
+A simple build tool for C and other sorts of projects. Designed for POSIX
+systems. It helps you write simple configure scripts and runs your Makefiles
+through the C preprocessor.
+
+DEPENDENCIES
+
+- sh
+- make
+- cpp
+
+INSTALLATION
+
+$ mkdir build && cd build
+$ ../configure
+$ make
+# make install
+
+Use ../configure --help to learn about available options.
+
+USAGE
+
+See the "examples" directory, or scmake(7).

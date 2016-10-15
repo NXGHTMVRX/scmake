@@ -1,0 +1,18 @@
+include config.mk
+
+hello: $(BASE)/hello.c
+	$(CC) -o $@ $(CFLAGS) $<
+
+all: hello
+
+install: hello
+	install -Dm644 hello $(DESTDIR)/bin/hello
+
+uninstall:
+	rm -f $(DESTDIR)/bin/hello
+
+clean:
+	find . -name "*.o" -delete
+	rm -f hello
+
+.PHONY: all install uninstall clean distclean

@@ -1,0 +1,20 @@
+include config.mk
+
+lib.sh: $(BASE)/lib.sh.in
+	cpp -P -nostdinc -traditional-cpp \
+		-D_DEFAULT_PREFIX_=__DEFAULT_PREFIX__ \
+		-D_PREFIX_=__PREFIX__ \
+		"$(BASE)/lib.sh.in" -o lib.sh
+
+all: lib.sh
+
+clean:
+	rm -f lib.sh
+
+install: all
+	install -Dm644 lib.sh $(DESTDIR)/lib/scmake/lib.sh
+	install -Dm644 $(BASE)/config.mk.in $(DESTDIR)/lib/scmake/config.mk.in
+
+uninstall:
+	rm -f $(DESTDIR)/lib/scmake/lib.sh
+	rm -f $(DESTDIR)/lib/scmake/config.mk.in

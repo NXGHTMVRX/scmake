@@ -1,0 +1,41 @@
+#!/usr/bin/env sh
+# Some weirdness we require to be self-hosting
+base=$(dirname "$(readlink -f "$0")")
+SCMAKE=$base
+prefix=/usr/local
+# End weirdness
+. ${SCMAKE:-/usr/lib/scmake}/lib.sh.in
+
+default_prefix="/usr/local"
+
+showhelp() {
+    cat <<EOF
+USAGE
+    $ $0 [options...]
+    $ make
+    # sudo make install
+
+OPTIONS
+    --prefix=[$prefix]
+        Sets the installation prefix.
+    --default-prefix=[$default_prefix]
+        Default installation prefix for programs built with scmake.
+EOF
+}
+
+while [ $# -gt 0 ]
+do
+    key=$(parsearg -k "$1")
+    val=$(parsearg -v "$1")
+    case "$key" in
+        --help) showhelp; exit 0 ;;
+        --prefix) prefix="$val" ;;
+        --default-prefix) default_prefix="$val" ;;
+        *) opterror "$1" ;;
+    esac
+    shift
+done
+
+setdefaults
+setstr default_prefix __DEFAULT_PREFIX__
+gen "$default_prefix"
